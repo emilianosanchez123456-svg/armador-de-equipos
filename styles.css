@@ -1,0 +1,1601 @@
+/* =========================================================
+   styles.css — Aspecto visual de la app.
+   Ordenado de lo general a lo particular:
+   1. Colores y medidas (variables)
+   2. Base
+   3. Botones
+   4. Encabezado, respaldo y menú
+   5. Pantallas: títulos, tarjetas, mensajes vacíos, pasos
+   6. Avisos y ventana de confirmación
+   7. Ajustes para celular
+   ========================================================= */
+
+/* ---------- 1. Colores y medidas ----------
+   Si querés cambiar un color en toda la app, cambialo acá. */
+:root {
+  --verde: #1e7b4f;
+  --verde-oscuro: #145c3a;
+  --verde-claro: #e5f3eb;
+  --fondo: #f3f5f2;
+  --tarjeta: #ffffff;
+  --texto: #1c2420;
+  --texto-suave: #56625c;
+  --borde: #d3dad5;
+  --rojo: #b3261e;
+  --rojo-claro: #fbe9e7;
+  --amarillo: #7a5000;
+  --amarillo-claro: #fff4d6;
+  --radio: 12px;
+  --sombra: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* ---------- 2. Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--texto);
+  background: var(--fondo);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.25;
+}
+
+/* Ancho máximo del contenido, centrado, con margen a los costados */
+.contenedor {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* ---------- 3. Botones ----------
+   Todos miden al menos 48px de alto para tocarlos cómodo con el dedo. */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 10px 20px;
+  border: 2px solid transparent;
+  border-radius: var(--radio);
+  font: inherit;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Borde amarillo bien visible cuando se navega con teclado */
+.boton:focus-visible,
+.menu-boton:focus-visible {
+  outline: 3px solid #f2b705;
+  outline-offset: 2px;
+}
+
+.boton-principal {
+  background: var(--verde);
+  color: #fff;
+}
+.boton-principal:hover {
+  background: var(--verde-oscuro);
+}
+
+.boton-secundario {
+  background: #fff;
+  color: var(--verde-oscuro);
+  border-color: var(--verde);
+}
+.boton-secundario:hover {
+  background: var(--verde-claro);
+}
+
+.boton-peligro {
+  background: var(--rojo);
+  color: #fff;
+}
+.boton-peligro:hover {
+  background: #8f1e18;
+}
+
+/* Botón blanco para usar sobre el fondo verde del encabezado */
+.boton-claro {
+  background: #fff;
+  color: var(--verde-oscuro);
+}
+.boton-claro:hover {
+  background: var(--verde-claro);
+}
+
+.boton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ---------- 4. Encabezado, respaldo y menú ---------- */
+.encabezado {
+  background: var(--verde);
+  color: #fff;
+}
+
+.encabezado-contenido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+
+.titulo-app {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.caja-respaldo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+}
+
+.caja-respaldo-texto {
+  margin: 0;
+  max-width: 250px;
+  font-size: 0.9rem;
+}
+
+.caja-respaldo-botones {
+  display: flex;
+  gap: 8px;
+}
+
+.menu {
+  background: var(--verde-oscuro);
+}
+
+.menu-contenido {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.menu-boton {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+}
+/* En la compu el menú muestra solo el texto largo; los íconos y textos cortos son para el celular */
+.menu-icono,
+.menu-texto-corto {
+  display: none;
+}
+.menu-boton:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* La pantalla en la que estás se marca en blanco */
+.menu-boton[aria-current="page"] {
+  background: #fff;
+  color: var(--verde-oscuro);
+}
+
+/* ---------- 5. Pantallas ---------- */
+/* Se usa "#pantalla" (y no "main") para que le gane a ".contenedor",
+   que también define el padding. */
+#pantalla {
+  padding-top: 20px;
+  /* espacio abajo para que los avisos flotantes no tapen nada */
+  padding-bottom: 120px;
+  outline: none;
+}
+
+.pantalla-titulo {
+  margin: 0 0 6px;
+  font-size: 1.6rem;
+}
+
+.pantalla-descripcion {
+  margin: 0 0 20px;
+  color: var(--texto-suave);
+}
+
+.tarjeta {
+  margin-bottom: 14px;
+  padding: 16px 18px;
+  background: var(--tarjeta);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+}
+.tarjeta h3 {
+  margin: 0 0 6px;
+}
+.tarjeta p {
+  margin: 0 0 6px;
+}
+
+/* Mensaje que aparece cuando todavía no hay datos */
+.vacio {
+  padding: 32px 20px;
+  text-align: center;
+  background: var(--tarjeta);
+  border: 2px dashed var(--borde);
+  border-radius: var(--radio);
+}
+.vacio-icono {
+  margin-bottom: 8px;
+  font-size: 2.6rem;
+  line-height: 1;
+}
+.vacio h3 {
+  margin: 0 0 8px;
+}
+.vacio p {
+  max-width: 480px;
+  margin: 0 auto 16px;
+  color: var(--texto-suave);
+}
+.vacio p:last-child {
+  margin-bottom: 0;
+}
+
+/* Pasos numerados de "Armar equipos" */
+.pasos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+.paso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 6px 14px 6px 6px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--texto-suave);
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 999px;
+}
+.paso-numero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--texto);
+  background: var(--borde);
+  border-radius: 50%;
+}
+.paso-activo {
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+  border-color: var(--verde);
+}
+.paso-activo .paso-numero {
+  color: #fff;
+  background: var(--verde);
+}
+/* Pasos ya hechos: se pueden tocar para volver */
+.paso-hecho {
+  color: var(--verde-oscuro);
+}
+.paso-hecho .paso-numero {
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+}
+.paso:hover:not(:disabled):not(.paso-activo) {
+  border-color: var(--verde);
+}
+.paso:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+.paso:focus-visible {
+  outline: 3px solid #f2b705;
+  outline-offset: 2px;
+}
+
+/* Etiqueta chiquita tipo "pastilla" (ej: posiciones clave) */
+.etiqueta {
+  display: inline-block;
+  padding: 2px 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+  border-radius: 999px;
+}
+
+.texto-suave {
+  color: var(--texto-suave);
+}
+
+.subtitulo {
+  margin: 28px 0 12px;
+  font-size: 1.25rem;
+}
+
+.contador {
+  margin: 0 0 10px;
+  color: var(--texto-suave);
+}
+
+/* Cabecera de tarjeta: título a la izquierda, botón a la derecha */
+.tarjeta-cabecera {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+}
+.tarjeta-cabecera h3 {
+  margin: 0;
+}
+
+/* Tarjeta que se está editando: borde verde para que se note */
+.tarjeta-editando {
+  border: 2px solid var(--verde);
+}
+
+/* Pastillas con la nota de cada deporte */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.chip {
+  padding: 4px 12px;
+  font-size: 0.95rem;
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+  border-radius: 999px;
+}
+.chip-vacio {
+  color: var(--texto-suave);
+  background: #eceeec;
+}
+
+/* Secciones dentro de una tarjeta (separadas por una línea) */
+.seccion {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borde);
+}
+.seccion h4 {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+}
+
+/* Lista de elementos con un botón a la derecha (posiciones, reglas) */
+.lista-items {
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+.fila-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--borde);
+}
+
+/* ---------- Formularios ---------- */
+.campo {
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.campo > label,
+.campo > legend,
+.etiqueta-campo {
+  display: block;
+  margin-bottom: 6px;
+  padding: 0;
+  font-weight: 600;
+}
+
+.campo-chico {
+  display: block;
+}
+
+/* Texto de ayuda debajo de un título o etiqueta */
+.ayuda {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+}
+
+input[type="text"],
+input[type="search"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 1rem; /* 16px o más: evita que el celular haga zoom al tocar */
+  color: var(--texto);
+  background: #fff;
+  border: 2px solid var(--borde);
+  border-radius: 10px;
+}
+input[type="text"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--verde);
+  box-shadow: 0 0 0 3px rgba(30, 123, 79, 0.2);
+}
+
+/* Campos en columnas que se acomodan solas según el ancho */
+.grilla-campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px 14px;
+}
+
+/* Fila: campo(s) + botón al costado */
+.fila-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+}
+.fila-form > .campo {
+  flex: 1 1 200px;
+  margin-bottom: 0;
+}
+.fila-regla > .campo {
+  flex: 1 1 160px;
+}
+
+/* Barra de arriba de una lista: buscador + botón "Agregar" */
+.barra-herramientas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.barra-herramientas > .campo {
+  flex: 1 1 240px;
+  margin-bottom: 0;
+}
+
+/* Mensaje de error debajo de un formulario */
+.error-campo {
+  margin: 12px 0;
+  padding: 10px 12px;
+  font-weight: 600;
+  color: var(--rojo);
+  background: var(--rojo-claro);
+  border-radius: 10px;
+}
+
+/* Bloque de un deporte dentro del editor de jugador */
+.bloque-deporte {
+  margin: 0 0 12px;
+  padding: 12px 14px;
+  background: var(--fondo);
+  border: 0;
+  border-radius: 10px;
+  min-width: 0;
+}
+.bloque-deporte legend {
+  float: left; /* truco para que la leyenda quede adentro del bloque */
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 0;
+  font-weight: 700;
+}
+.bloque-deporte legend + * {
+  clear: both;
+}
+
+/* Lista desplegable "Ver cómo cambió la nota" */
+.evolucion {
+  margin-top: 8px;
+}
+.evolucion summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--verde-oscuro);
+  cursor: pointer;
+}
+.evolucion ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.evolucion li {
+  padding: 2px 0;
+}
+
+/* Fila de botones al pie de un formulario */
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* Botón un poco más bajo, para usar dentro de listas */
+.boton-chico {
+  min-height: 44px;
+  padding: 6px 14px;
+  font-size: 0.95rem;
+}
+
+/* Botón de borrar "discreto": blanco con borde rojo */
+.boton-peligro-borde {
+  color: var(--rojo);
+  background: #fff;
+  border-color: var(--rojo);
+}
+.boton-peligro-borde:hover {
+  background: var(--rojo-claro);
+}
+
+/* ---------- Pantalla "Armar equipos" ---------- */
+
+/* Texto que solo leen los lectores de pantalla (para personas ciegas) */
+.solo-lectores {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Paso 1: botones grandes de deportes */
+.grilla-deportes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 12px 0;
+}
+.boton-deporte {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-height: 120px;
+  padding: 16px 10px;
+  font: inherit;
+  color: var(--texto);
+  background: #fff;
+  border: 2px solid var(--borde);
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+.boton-deporte:hover {
+  border-color: var(--verde);
+  background: var(--verde-claro);
+}
+.boton-deporte:focus-visible {
+  outline: 3px solid #f2b705;
+  outline-offset: 2px;
+}
+.boton-deporte.elegido {
+  border-color: var(--verde);
+  background: var(--verde-claro);
+}
+.boton-deporte-icono {
+  font-size: 2.4rem;
+  line-height: 1.1;
+}
+.boton-deporte-nombre {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.boton-deporte-detalle {
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+
+/* Paso 2: formulario chico dentro de la tarjeta */
+.caja-formulario {
+  margin: 0 0 16px;
+  padding: 14px;
+  background: var(--fondo);
+  border: 2px solid var(--verde);
+  border-radius: var(--radio);
+}
+.caja-formulario h4 {
+  margin: 0 0 10px;
+}
+
+.atajos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.subtitulo-lista {
+  margin: 20px 0 4px;
+}
+
+/* Lista de jugadores para marcar */
+.lista-presentes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fila-presente {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+  padding: 4px 8px 4px 4px;
+  border-bottom: 1px solid var(--borde);
+  border-radius: 8px;
+}
+.fila-presente.marcado {
+  background: var(--verde-claro);
+}
+.fila-presente.falta-nota {
+  background: var(--amarillo-claro);
+}
+/* Toda la parte izquierda (casilla + nombre) se puede tocar */
+.fila-presente-marca {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.fila-presente-marca input {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  accent-color: var(--verde);
+  cursor: pointer;
+}
+.fila-presente-nombre {
+  font-weight: 600;
+}
+.fila-presente-nota select {
+  width: auto;
+  min-width: 96px;
+}
+.fila-presente-aviso {
+  flex: 1 1 100%;
+  margin: 0 0 6px 44px;
+  font-size: 0.95rem;
+  color: var(--amarillo);
+}
+
+/* Barra pegada abajo con el contador y el botón "Siguiente" */
+.barra-fija-abajo {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  margin: 0 -16px;
+  padding: 10px 16px;
+  background: rgba(243, 245, 242, 0.96);
+  border-top: 1px solid var(--borde);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.06);
+}
+.barra-fija-abajo .error-campo {
+  margin: 0 0 8px;
+}
+.barra-fija-contenido {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.contador-presentes {
+  font-size: 1.05rem;
+}
+/* Si hay barra abajo, los avisos flotantes aparecen más arriba para no taparla */
+body:has(.barra-fija-abajo) .avisos {
+  bottom: 110px;
+}
+
+/* Paso 3: botones de cantidad de equipos */
+.grilla-cantidades {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.boton-cantidad {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100px;
+  padding: 10px 6px;
+  font: inherit;
+  color: var(--texto);
+  background: #fff;
+  border: 2px solid var(--borde);
+  border-radius: var(--radio);
+  cursor: pointer;
+}
+.boton-cantidad:hover,
+.boton-cantidad.elegido {
+  border-color: var(--verde);
+  background: var(--verde-claro);
+}
+.boton-cantidad:focus-visible {
+  outline: 3px solid #f2b705;
+  outline-offset: 2px;
+}
+.boton-cantidad-numero {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.boton-cantidad-detalle {
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+}
+.boton-cantidad-aviso {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--amarillo);
+}
+
+/* Cajas de aviso (amarilla) y de éxito (verde) */
+.caja-aviso,
+.caja-exito {
+  margin: 14px 0;
+  padding: 14px 16px;
+  border-radius: var(--radio);
+}
+.caja-aviso {
+  color: #5c3c00;
+  background: var(--amarillo-claro);
+  border: 1px solid #f0d58c;
+}
+.caja-exito {
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+  border: 1px solid #a9d5bb;
+}
+.caja-aviso p,
+.caja-exito p {
+  margin: 0 0 8px;
+}
+.caja-aviso ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+/* Paso 4: equipos */
+.seccion-equipos h3 {
+  margin: 0 0 10px;
+}
+.resumen-diferencia {
+  margin: 0 0 14px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+}
+.resumen-diferencia p {
+  margin: 0 0 4px;
+}
+.grilla-equipos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.equipo {
+  margin: 0;
+  border-top: 6px solid var(--color-equipo, var(--verde));
+}
+.equipo h4 {
+  margin: 0 0 4px;
+  font-size: 1.2rem;
+}
+.equipo-totales {
+  font-size: 0.95rem;
+  color: var(--texto-suave);
+}
+.equipo-jugadores {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.equipo-jugadores li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--borde);
+}
+.equipo-jugadores li:last-child {
+  border-bottom: 0;
+}
+.equipo-jugador-nota {
+  flex: none;
+  min-width: 32px;
+  padding: 2px 8px;
+  font-weight: 700;
+  text-align: center;
+  background: var(--fondo);
+  border-radius: 8px;
+}
+/* Un color distinto para cada equipo */
+.equipo-color-0 { --color-equipo: #1e7b4f; }
+.equipo-color-1 { --color-equipo: #2563a8; }
+.equipo-color-2 { --color-equipo: #c2560c; }
+.equipo-color-3 { --color-equipo: #7a3db8; }
+.equipo-color-4 { --color-equipo: #b3261e; }
+.equipo-color-5 { --color-equipo: #4b5563; }
+
+.acciones-equipos {
+  margin-top: 16px;
+}
+.texto-copiar {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  border: 2px solid var(--borde);
+  border-radius: 10px;
+}
+
+/* ---------- Pantalla "Historial" ---------- */
+
+.centrado {
+  text-align: center;
+}
+
+/* Botones de filtro por deporte */
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.filtro {
+  min-height: 44px;
+  padding: 6px 14px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--texto);
+  background: #fff;
+  border: 2px solid var(--borde);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.filtro:hover {
+  border-color: var(--verde);
+}
+.filtro:focus-visible {
+  outline: 3px solid #f2b705;
+  outline-offset: 2px;
+}
+.filtro-activo {
+  color: #fff;
+  background: var(--verde);
+  border-color: var(--verde);
+}
+.filtro-cantidad {
+  display: inline-block;
+  min-width: 24px;
+  padding: 0 6px;
+  margin-left: 4px;
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--texto);
+  background: var(--fondo);
+  border-radius: 999px;
+}
+
+/* Tarjeta de partido */
+.partido h3 {
+  margin: 0;
+}
+.partido-fecha {
+  font-weight: 400;
+  color: var(--texto-suave);
+}
+.estado-partido {
+  padding: 4px 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 999px;
+}
+.estado-listo {
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+}
+.estado-pendiente {
+  color: var(--amarillo);
+  background: var(--amarillo-claro);
+}
+
+.partido-equipos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin: 12px 0;
+}
+.partido-equipo {
+  padding: 10px 12px;
+  background: var(--fondo);
+  border-left: 5px solid var(--color-equipo, var(--verde));
+  border-radius: 8px;
+}
+.partido-equipo-ganador {
+  background: var(--verde-claro);
+}
+.partido-equipo-cabecera {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.partido-marcador {
+  margin-left: auto;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.partido-equipo-jugadores {
+  margin: 6px 0 2px;
+}
+.partido-equipo-totales {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.partido-comentario {
+  font-style: italic;
+}
+
+/* Etiqueta de evaluación (Parejo / Algo desparejo / Muy desparejo) */
+.evaluacion {
+  display: inline-block;
+  padding: 2px 10px;
+  font-weight: 600;
+  border-radius: 999px;
+}
+.evaluacion-parejo {
+  color: var(--verde-oscuro);
+  background: var(--verde-claro);
+}
+.evaluacion-algo {
+  color: var(--amarillo);
+  background: var(--amarillo-claro);
+}
+.evaluacion-muy {
+  color: var(--rojo);
+  background: var(--rojo-claro);
+}
+.evaluacion-ninguna {
+  color: var(--texto-suave);
+  background: #eceeec;
+}
+
+/* Formulario de partido */
+.grilla-resultado {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+.grilla-resultado input {
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+}
+.ayuda-equipo {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+/* Opciones de evaluación: botones grandes que funcionan como "radio" */
+.opciones-evaluacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.opcion-evaluacion {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 8px 16px;
+  font-weight: 600;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  cursor: pointer;
+  opacity: 0.75;
+}
+.opcion-radio:checked + .opcion-evaluacion {
+  border-color: currentColor;
+  opacity: 1;
+  box-shadow: 0 0 0 2px #fff inset;
+}
+.opcion-radio:checked + .opcion-evaluacion::before {
+  content: "✓ ";
+  white-space: pre;
+}
+.opcion-radio:focus-visible + .opcion-evaluacion {
+  outline: 3px solid #f2b705;
+  outline-offset: 2px;
+}
+
+textarea {
+  resize: vertical;
+}
+.campo-fecha input {
+  max-width: 220px;
+}
+.select-angosto {
+  width: auto;
+  min-width: 140px;
+}
+.corregir-equipos {
+  margin: 0 0 14px;
+}
+.corregir-equipos summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--verde-oscuro);
+  cursor: pointer;
+}
+
+/* ---------- Pantalla "Estadísticas" ---------- */
+
+.tarjeta h4 {
+  margin: 14px 0 6px;
+}
+
+/* Números grandes con su explicación */
+.grilla-numeros {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 10px;
+  margin: 10px 0;
+}
+.numero-destacado {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 12px;
+  background: var(--fondo);
+  border-radius: 10px;
+}
+.numero-destacado-valor {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.numero-destacado-etiqueta {
+  font-size: 0.85rem;
+  color: var(--texto-suave);
+}
+
+/* Barra dividida de evaluaciones (con 2px de separación entre partes) */
+.barra-evaluaciones {
+  display: flex;
+  gap: 2px;
+  height: 16px;
+  margin: 8px 0;
+}
+.barra-evaluaciones-parte {
+  min-width: 6px;
+}
+.barra-evaluaciones-parte:first-child {
+  border-radius: 4px 0 0 4px;
+}
+.barra-evaluaciones-parte:last-child {
+  border-radius: 0 4px 4px 0;
+}
+.barra-evaluaciones-parte:only-child {
+  border-radius: 4px;
+}
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+.leyenda li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.leyenda-muestra {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+}
+
+/* Fila de jugador en "Por jugador" */
+.fila-estadistica {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 14px;
+}
+
+/* Gráfico de evolución de la nota */
+.titulo-grafico {
+  margin: 14px 0 4px;
+  font-size: 0.95rem;
+}
+.grafico-nota {
+  width: 100%;
+  max-width: 640px;
+}
+.grafico-contenedor {
+  position: relative;
+}
+.svg-grafico {
+  display: block;
+  overflow: visible;
+}
+.grafico-guia {
+  stroke: #e3e7e4;
+  stroke-width: 1;
+}
+.grafico-eje {
+  font-size: 12px;
+  fill: var(--texto-suave);
+}
+.grafico-linea {
+  fill: none;
+  stroke: var(--verde);
+  stroke-width: 2;
+  stroke-linejoin: round;
+}
+.grafico-zona {
+  fill: transparent;
+  cursor: pointer;
+}
+.grafico-marca {
+  fill: var(--verde);
+  stroke: #fff;
+  stroke-width: 2;
+}
+.grafico-punto {
+  outline: none;
+}
+.grafico-punto:hover .grafico-marca,
+.grafico-punto:focus .grafico-marca {
+  stroke: #f2b705;
+  stroke-width: 3;
+}
+.grafico-etiqueta {
+  font-size: 13px;
+  font-weight: 700;
+  fill: var(--texto);
+}
+.grafico-globo {
+  position: absolute;
+  z-index: 5;
+  max-width: 240px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  color: #fff;
+  background: #2f3b36;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+/* ---------- Sugerencias de notas (pantalla "Jugadores") ---------- */
+
+.tarjeta-sugerencias {
+  background: #fffbea;
+  border: 2px solid #f0d58c;
+}
+.lista-sugerencias {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.sugerencia {
+  padding: 12px 0;
+  border-top: 1px solid #f0d58c;
+}
+.sugerencia-titulo {
+  margin: 0 0 4px;
+}
+.sugerencia-cambio {
+  padding: 1px 8px;
+  font-weight: 700;
+  background: #fff;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+}
+.sugerencia-motivo {
+  margin: 0 0 6px;
+}
+
+/* Numerito sobre un botón del menú (ej: sugerencias pendientes) */
+.insignia {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  margin-left: 6px;
+  padding: 0 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #3d2a00;
+  background: #f2b705;
+  border-radius: 999px;
+}
+
+/* ---------- Guía, recordatorios y "Deshacer" ---------- */
+
+/* Título de pantalla con el botón "¿Cómo funciona?" al costado */
+.titulo-con-ayuda {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 8px;
+}
+.titulo-con-ayuda .pantalla-titulo {
+  margin: 0;
+}
+.boton-ayuda {
+  min-height: 44px;
+  padding: 6px 12px;
+  font: inherit;
+  font-weight: 600;
+  color: var(--verde-oscuro);
+  background: transparent;
+  border: 0;
+  border-radius: 10px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.boton-ayuda:hover {
+  background: var(--verde-claro);
+}
+.boton-ayuda:focus-visible {
+  outline: 3px solid #f2b705;
+}
+
+.guia {
+  border: 2px solid var(--verde);
+}
+.guia-pasos {
+  margin: 8px 0 12px;
+  padding-left: 22px;
+}
+.guia-pasos li {
+  margin-bottom: 8px;
+}
+.guia-nota {
+  padding: 10px 12px;
+  background: var(--verde-claro);
+  border-radius: 10px;
+}
+
+.recordatorio {
+  margin-top: 16px;
+  margin-bottom: 0;
+}
+
+/* Botón dentro de un aviso flotante (ej: "Deshacer") */
+.aviso-accion {
+  flex: none;
+  min-height: 40px;
+  padding: 6px 14px;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid #fff;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.aviso-accion:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ---------- 6. Avisos y ventana de confirmación ---------- */
+
+/* Aviso amarillo que queda fijo arriba (problemas importantes) */
+.aviso-fijo {
+  margin-top: 16px;
+  padding: 12px 16px;
+  color: var(--amarillo);
+  background: var(--amarillo-claro);
+  border: 1px solid #f0d58c;
+  border-radius: var(--radio);
+}
+.aviso-fijo p {
+  margin: 0;
+}
+
+/* Avisos flotantes abajo de la pantalla */
+.avisos {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  pointer-events: none; /* deja tocar lo que hay detrás, salvo el aviso en sí */
+}
+.aviso {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 520px;
+  padding: 12px 8px 12px 16px;
+  color: #fff;
+  background: #2f3b36;
+  border-radius: var(--radio);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  pointer-events: auto;
+}
+.aviso p {
+  flex: 1;
+  margin: 6px 0;
+}
+.aviso-exito {
+  background: var(--verde-oscuro);
+}
+.aviso-error {
+  background: var(--rojo);
+}
+.aviso-cerrar {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.aviso-cerrar:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Ventana de confirmación */
+.dialogo {
+  width: min(480px, calc(100% - 32px));
+  padding: 22px;
+  color: var(--texto);
+  border: 0;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+.dialogo::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+.dialogo h2 {
+  margin: 0 0 10px;
+  font-size: 1.3rem;
+}
+.dialogo-mensaje p {
+  margin: 0 0 10px;
+}
+.dialogo-mensaje ul {
+  margin: 0 0 10px;
+  padding-left: 20px;
+}
+.dialogo-botones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+/* ---------- 7. Ajustes para celular (pantallas angostas) ---------- */
+
+/* Alto de la barra de menú de abajo (solo existe en celular) */
+:root {
+  --alto-menu-abajo: 0px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --alto-menu-abajo: 64px;
+  }
+  body {
+    font-size: 16px;
+  }
+
+  /* Encabezado compacto: título, explicación en una línea y los dos botones */
+  .titulo-app {
+    font-size: 1.15rem;
+  }
+  .encabezado-contenido {
+    gap: 6px;
+    padding-top: 8px;
+    padding-bottom: 10px;
+  }
+  .caja-respaldo {
+    gap: 6px;
+  }
+  .caja-respaldo,
+  .caja-respaldo-botones {
+    width: 100%;
+  }
+  .caja-respaldo-texto {
+    max-width: none;
+    font-size: 0.8rem;
+  }
+  .caja-respaldo-botones .boton {
+    flex: 1;
+    min-height: 40px;
+    padding: 6px 10px;
+    font-size: 0.95rem;
+  }
+
+  /* Menú fijo abajo, con ícono y texto (como en las apps del celular) */
+  .menu {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15);
+  }
+  .menu-contenido {
+    flex-wrap: nowrap;
+    gap: 2px;
+    padding: 4px;
+  }
+  .menu-boton {
+    position: relative;
+    flex: 1 1 0;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    min-height: 56px;
+    padding: 4px 2px;
+    font-size: 0.72rem;
+    line-height: 1.2;
+  }
+  .menu-icono {
+    display: block;
+    font-size: 1.3rem;
+    line-height: 1.1;
+  }
+  .menu-texto-largo {
+    display: none;
+  }
+  .menu-texto-corto {
+    display: inline;
+  }
+  .menu-boton .insignia {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    min-width: 18px;
+    height: 18px;
+    margin: 0 0 0 8px;
+    padding: 0 4px;
+    font-size: 0.7rem;
+  }
+
+  /* Espacio abajo para que el menú no tape el contenido */
+  #pantalla {
+    padding-top: 14px;
+    padding-bottom: calc(140px + var(--alto-menu-abajo));
+  }
+  .barra-fija-abajo {
+    bottom: var(--alto-menu-abajo);
+  }
+  .avisos {
+    bottom: calc(var(--alto-menu-abajo) + 12px);
+  }
+  body:has(.barra-fija-abajo) .avisos {
+    bottom: calc(var(--alto-menu-abajo) + 110px);
+  }
+
+  /* Pasos: en celular solo el paso actual muestra el nombre (los demás, el número) */
+  .paso:not(.paso-activo) {
+    padding: 6px;
+  }
+  .paso:not(.paso-activo) .paso-nombre {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .pantalla-titulo {
+    font-size: 1.35rem;
+  }
+  /* En celular, los botones de la ventana de confirmación
+     y de los formularios ocupan todo el ancho */
+  .dialogo-botones .boton,
+  .fila-form > .boton,
+  .barra-herramientas > .boton,
+  .acciones .boton,
+  .barra-fija-contenido .boton {
+    flex: 1 1 100%;
+  }
+  .grilla-deportes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grilla-cantidades {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .pasos {
+    gap: 6px;
+  }
+  .paso {
+    padding-right: 10px;
+    font-size: 0.85rem;
+  }
+  .fila-presente-aviso {
+    margin-left: 8px;
+  }
+  form > .boton-principal {
+    width: 100%;
+  }
+}

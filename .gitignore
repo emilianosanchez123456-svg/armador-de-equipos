@@ -1,0 +1,7 @@
+# Configuración local de Claude (no es parte de la app)
+.claude/
+
+# Archivos que crea el sistema operativo
+Thumbs.db
+desktop.ini
+.DS_Store

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pruebas · Armador de Equipos</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; max-width: 860px; margin: 0 auto; padding: 16px; background: #f3f5f2; color: #1c2420; }
+    h1 { margin-top: 0; }
+    .resumen { padding: 14px 18px; border-radius: 12px; font-size: 1.2rem; font-weight: 700; color: #fff; }
+    .resumen.todo-bien { background: #1e7b4f; }
+    .resumen.hay-fallas { background: #b3261e; }
+    h2 { margin-top: 28px; font-size: 1.15rem; }
+    ul { list-style: none; padding: 0; margin: 0; }
+    li { padding: 8px 12px; margin-bottom: 6px; border-radius: 8px; background: #fff; border-left: 6px solid; }
+    li.paso { border-color: #1e7b4f; }
+    li.falla { border-color: #b3261e; background: #fbe9e7; }
+    .detalle { display: block; margin-top: 4px; font-family: Consolas, monospace; font-size: .9rem; color: #8f1e18; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>Pruebas del Armador de Equipos</h1>
+  <p>Esta página revisa automáticamente que la lógica de la app funcione. Verde = bien, rojo = algo falló.</p>
+  <div id="resumen" class="resumen">Corriendo pruebas…</div>
+  <div id="resultados"></div>
+
+  <noscript>
+    <p class="resumen hay-fallas">Este navegador tiene JavaScript desactivado, así que las pruebas no pueden correr.</p>
+  </noscript>
+
+  <!-- Si algún archivo tiene un error, lo mostramos en la página en vez de quedar "Corriendo pruebas…" -->
+  <script>
+    window.addEventListener("error", function (evento) {
+      var resumen = document.getElementById("resumen");
+      resumen.className = "resumen hay-fallas";
+      resumen.textContent = "✘ Error al cargar las pruebas: " + evento.message +
+        (evento.filename ? " (en " + evento.filename.split("/").pop() + ", línea " + evento.lineno + ")" : "");
+    });
+  </script>
+
+  <!-- Los mismos archivos de lógica que usa la app (sin las pantallas) -->
+  <script src="js/datos.js"></script>
+  <script src="js/cambios.js"></script>
+  <script src="js/balanceo.js"></script>
+  <script src="js/calculos.js"></script>
+  <!-- Las pruebas -->
+  <script src="js/tests.js"></script>
+
+  <!-- Si después de todo sigue diciendo "Corriendo pruebas…", es que no se pudieron cargar los archivos -->
+  <script>
+    if (document.getElementById("resumen").textContent === "Corriendo pruebas…") {
+      document.getElementById("resumen").className = "resumen hay-fallas";
+      document.getElementById("resumen").textContent =
+        "✘ No se pudieron cargar los archivos de pruebas. Revisá que tests.html esté en la misma carpeta que la carpeta \"js\" " +
+        "y abrilo con doble clic en Chrome, Edge o Firefox.";
+    }
+  </script>
+</body>
+</html>

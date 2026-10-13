@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Armador de Equipos</title>
+  <!-- Ícono de la pestaña: una pelota dibujada con un emoji -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Para poder "instalar" la app en el celular (ícono en la pantalla de inicio).
+       El archivo manifest.webmanifest se agrega desde inicio.js solo cuando la app
+       está publicada en internet (abierta con doble clic no hace falta y daría error). -->
+  <meta name="theme-color" content="#1e7b4f">
+  <link rel="apple-touch-icon" href="iconos/icono-180.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Equipos">
+</head>
+<body>
+
+  <!-- ===== ENCABEZADO: siempre visible arriba, igual en todas las pantallas ===== -->
+  <header class="encabezado">
+    <div class="contenedor encabezado-contenido">
+      <h1 class="titulo-app">Armador de Equipos</h1>
+
+      <!-- Respaldo de datos: Exportar / Importar -->
+      <div class="caja-respaldo">
+        <p class="caja-respaldo-texto">Guardá una copia de tus datos o pasalos a otro dispositivo.</p>
+        <div class="caja-respaldo-botones">
+          <button type="button" id="boton-exportar" class="boton boton-claro">Exportar datos</button>
+          <button type="button" id="boton-importar" class="boton boton-claro">Importar datos</button>
+          <!-- Selector de archivo oculto: lo abre el botón "Importar datos" -->
+          <input type="file" id="archivo-importar" accept=".json,application/json" hidden>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menú principal. Cada enlace cambia la parte "#..." de la dirección
+         y la app muestra la pantalla que corresponde.
+         En la compu va arriba; en el celular, fijo abajo (con íconos), como en las apps. -->
+    <nav class="menu" aria-label="Menú principal">
+      <div class="contenedor menu-contenido">
+        <a href="#armar" data-pantalla="armar" class="menu-boton">
+          <span class="menu-icono" aria-hidden="true">⚖️</span>
+          <span class="menu-texto-largo">Armar equipos</span><span class="menu-texto-corto">Armar</span>
+        </a>
+        <a href="#historial" data-pantalla="historial" class="menu-boton">
+          <span class="menu-icono" aria-hidden="true">📋</span><span>Historial</span>
+        </a>
+        <a href="#estadisticas" data-pantalla="estadisticas" class="menu-boton">
+          <span class="menu-icono" aria-hidden="true">📊</span><span>Estadísticas</span>
+        </a>
+        <a href="#jugadores" data-pantalla="jugadores" class="menu-boton">
+          <span class="menu-icono" aria-hidden="true">👥</span><span>Jugadores</span>
+        </a>
+        <a href="#deportes" data-pantalla="deportes" class="menu-boton">
+          <span class="menu-icono" aria-hidden="true">🏅</span><span>Deportes</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Avisos importantes que quedan fijos (ej: "este navegador no puede guardar") -->
+  <div id="aviso-fijo" class="contenedor" hidden></div>
+
+  <!-- Recordatorio de hacer una copia de los datos (aparece solo cuando hace falta) -->
+  <div id="recordatorios" class="contenedor"></div>
+
+  <!-- Acá se dibuja la pantalla elegida en el menú -->
+  <main id="pantalla" class="contenedor" tabindex="-1"></main>
+
+  <!-- Mensajes cortos que aparecen abajo y se van solos -->
+  <div id="avisos" class="avisos" aria-live="polite"></div>
+
+  <!-- Ventana para pedir confirmación antes de borrar o reemplazar algo -->
+  <dialog id="dialogo" class="dialogo" aria-labelledby="dialogo-titulo">
+    <h2 id="dialogo-titulo"></h2>
+    <div id="dialogo-mensaje" class="dialogo-mensaje"></div>
+    <div class="dialogo-botones">
+      <button type="button" id="dialogo-cancelar" class="boton boton-secundario">Cancelar</button>
+      <button type="button" id="dialogo-confirmar" class="boton boton-principal">Aceptar</button>
+    </div>
+  </dialog>
+
+  <noscript>
+    <p class="contenedor">Esta app necesita JavaScript para funcionar. Activalo en tu navegador y volvé a abrirla.</p>
+  </noscript>
+
+  <!-- ===== SCRIPTS: el orden importa (cada uno usa cosas de los anteriores) ===== -->
+  <script src="js/datos.js"></script>              <!-- datos y guardado -->
+  <script src="js/cambios.js"></script>            <!-- cambios sobre jugadores y deportes -->
+  <script src="js/balanceo.js"></script>           <!-- algoritmo para armar equipos parejos -->
+  <script src="js/calculos.js"></script>           <!-- cuentas para estadísticas y sugerencias -->
+  <script src="js/ui.js"></script>                 <!-- herramientas de pantalla comunes -->
+  <script src="js/respaldo.js"></script>           <!-- exportar / importar -->
+  <script src="js/pantalla-armar.js"></script>
+  <script src="js/pantalla-historial.js"></script>
+  <script src="js/pantalla-estadisticas.js"></script>
+  <script src="js/pantalla-jugadores.js"></script>
+  <script src="js/pantalla-deportes.js"></script>
+  <script src="js/inicio.js"></script>             <!-- arranca la app (siempre último) -->
+</body>
+</html>
